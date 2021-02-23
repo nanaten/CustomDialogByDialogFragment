@@ -1,8 +1,7 @@
 package com.nanaten.customdialog
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.nanaten.customdialog.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -11,7 +10,9 @@ class MainActivity : AppCompatActivity() {
 
         val binding = ActivityMainBinding.inflate(layoutInflater)
         binding.dialogButton.setOnClickListener {
-            CustomDialog().show(supportFragmentManager, CustomDialog::class.simpleName)
+            CustomDialog
+                .create("カスタムタイトル", "カスタムメッセージ")
+                .show(supportFragmentManager, CustomDialog::class.simpleName)
         }
         setContentView(binding.root)
     }
