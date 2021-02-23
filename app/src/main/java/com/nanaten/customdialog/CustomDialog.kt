@@ -85,9 +85,9 @@ class CustomDialog() : DialogFragment() {
             negativeButtonText =
                 it.getString(NEGATIVE_BUTTON_TEXT_KEY, DEFAULT_NEGATIVE_BUTTON_TEXT)
             positiveButtonClickListener =
-                it.getSerializable(POSITIVE_BUTTON_LISTENER_KEY) as ButtonClickListener
+                it.getSerializable(POSITIVE_BUTTON_LISTENER_KEY) as? ButtonClickListener
             negativeButtonClickListener =
-                it.getSerializable(NEGATIVE_BUTTON_LISTENER_KEY) as ButtonClickListener
+                it.getSerializable(NEGATIVE_BUTTON_LISTENER_KEY) as? ButtonClickListener
         }
         val binding = LayoutCustomDialogBinding.inflate(requireActivity().layoutInflater)
         binding.title.text = title
