@@ -19,43 +19,49 @@ class CustomDialog() : DialogFragment() {
     companion object {
         private const val DEFAULT_POSITIVE_BUTTON_TEXT = "OK"
         private const val DEFAULT_NEGATIVE_BUTTON_TEXT = "キャンセル"
+        private const val TITLE_KEY = "TitleKey"
+        private const val MESSAGE_KEY = "MessageKey"
+        private const val POSITIVE_BUTTON_TEXT_KEY = "PositiveButtonTextKey"
+        private const val POSITIVE_BUTTON_LISTENER_KEY = "PositiveButtonListenerKey"
+        private const val NEGATIVE_BUTTON_TEXT_KEY = "NegativeButtonTextKey"
+        private const val NEGATIVE_BUTTON_LISTENER_KEY = "NegativeButtonListenerKey"
     }
 
     class Builder() {
         private val bundle = Bundle()
         fun setTitle(title: String): Builder {
             return this.apply {
-                bundle.putString("TitleKey", title)
+                bundle.putString(TITLE_KEY, title)
             }
         }
 
         fun setMessage(message: String): Builder {
             return this.apply {
-                bundle.putString("MessageKey", message)
+                bundle.putString(MESSAGE_KEY, message)
             }
         }
 
-        fun setPositiveButton(buttonText: String, listener: () -> Unit): Builder {
+        fun setPositiveButton(buttonText: String, listener: (() -> Unit)? = null): Builder {
             return this.apply {
-                bundle.putString("PositiveButtonTextKey", buttonText)
+                bundle.putString(POSITIVE_BUTTON_TEXT_KEY, buttonText)
                 val positiveButtonListener = object : ButtonClickListener {
                     override fun onClick() {
-                        listener.invoke()
+                        listener?.invoke()
                     }
                 }
-                bundle.putSerializable("PositiveButtonListenerKey", positiveButtonListener)
+                bundle.putSerializable(POSITIVE_BUTTON_LISTENER_KEY, positiveButtonListener)
             }
         }
 
-        fun setNegativeButton(buttonText: String, listener: () -> Unit): Builder {
+        fun setNegativeButton(buttonText: String, listener: (() -> Unit)? = null): Builder {
             return this.apply {
-                bundle.putString("NegativeButtonTextKey", buttonText)
+                bundle.putString(NEGATIVE_BUTTON_TEXT_KEY, buttonText)
                 val negativeButtonListener = object : ButtonClickListener {
                     override fun onClick() {
-                        listener.invoke()
+                        listener?.invoke()
                     }
                 }
-                bundle.putSerializable("NegativeButtonListenerKey", negativeButtonListener)
+                bundle.putSerializable(NEGATIVE_BUTTON_LISTENER_KEY, negativeButtonListener)
             }
         }
 
@@ -72,14 +78,16 @@ class CustomDialog() : DialogFragment() {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         arguments?.let {
-            title = it.getString("TitleKey", "")
-            message = it.getString("MessageKey", "")
-            positiveButtonText = it.getString("PositiveButtonTextKey", DEFAULT_POSITIVE_BUTTON_TEXT)
-            negativeButtonText = it.getString("NegativeButtonTextKey", DEFAULT_NEGATIVE_BUTTON_TEXT)
+            title = it.getString(TITLE_KEY, "")
+            message = it.getString(MESSAGE_KEY, "")
+            positiveButtonText =
+                it.getString(POSITIVE_BUTTON_TEXT_KEY, DEFAULT_POSITIVE_BUTTON_TEXT)
+            negativeButtonText =
+                it.getString(NEGATIVE_BUTTON_TEXT_KEY, DEFAULT_NEGATIVE_BUTTON_TEXT)
             positiveButtonClickListener =
-                it.getSerializable("PositiveButtonListenerKey") as ButtonClickListener
+                it.getSerializable(POSITIVE_BUTTON_LISTENER_KEY) as ButtonClickListener
             negativeButtonClickListener =
-                it.getSerializable("NegativeButtonListenerKey") as ButtonClickListener
+                it.getSerializable(NEGATIVE_BUTTON_LISTENER_KEY) as ButtonClickListener
         }
         val binding = LayoutCustomDialogBinding.inflate(requireActivity().layoutInflater)
         binding.title.text = title
