@@ -43,30 +43,28 @@ class CustomDialog : DialogFragment() {
         }
 
         fun setPositiveButton(buttonText: String, listener: (() -> Unit)? = null): Builder {
+            fragment.childFragmentManager
+                .setFragmentResultListener(
+                    REQUEST_POSITIVE_BUTTON_KEY,
+                    fragment.viewLifecycleOwner
+                ) { _, _ ->
+                    listener?.invoke()
+                }
             return this.apply {
                 bundle.putString(POSITIVE_BUTTON_TEXT_KEY, buttonText)
-                fragment.apply {
-                    this.childFragmentManager
-                        .setFragmentResultListener(
-                            REQUEST_POSITIVE_BUTTON_KEY,
-                            this.viewLifecycleOwner
-                        ) { _, _ ->
-                            listener?.invoke()
-                        }
-                }
             }
         }
 
         fun setNegativeButton(buttonText: String, listener: (() -> Unit)? = null): Builder {
+            fragment.childFragmentManager
+                .setFragmentResultListener(
+                    REQUEST_NEGATIVE_BUTTON_KEY,
+                    fragment.viewLifecycleOwner
+                ) { _, _ ->
+                    listener?.invoke()
+                }
             return this.apply {
                 bundle.putString(NEGATIVE_BUTTON_TEXT_KEY, buttonText)
-                fragment.childFragmentManager
-                    .setFragmentResultListener(
-                        REQUEST_NEGATIVE_BUTTON_KEY,
-                        fragment.viewLifecycleOwner
-                    ) { _, _ ->
-                        listener?.invoke()
-                    }
             }
         }
 
